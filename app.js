@@ -39,6 +39,8 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+console.log('Deployment test');"
+
 // Error handling middleware (must be last)
 app.use(notFound);
 app.use(errorHandler);
