@@ -2,7 +2,7 @@ name: Deploy to Debian VPS
 
 on:
   push:
-    branches: [ master ]  # Changed from main to master
+    branches: [ master ]
 
 jobs:
   test:
@@ -39,13 +39,26 @@ jobs:
           # Navigate to project directory
           cd /home/deploy/tryoutgo
           
-          # Pull latest changes
+          # Pull latest changes from master branch
           git pull origin master
           
           # Install/update dependencies
           npm install --production
           
-          # Restart your application
-          pm2 restart tryoutgo || pm2 start app.js --name tryoutgo
+          # Run database migrations if your app has them
+          # npm run migrate
+          # or
+          # npx sequelize-cli db:migrate
+          # or
+          # npx prisma migrate deploy
+          
+          # Restart your application with ecosystem config
+          pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
+          
+          # Wait a moment for app to start
+          sleep 3
+          
+          # Check if app is running
+          pm2 status tryoutgo
           
           echo "✅ Deployment completed successfully!"
